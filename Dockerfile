@@ -1,5 +1,5 @@
 FROM openjdk:8-jdk-alpine
-LABEL Miguel Doctor <migueldoctor@gmail.com>
+#LABEL Miguel Doctor <migueldoctor@gmail.com>
 RUN apk add --no-cache curl tar bash procps
 
 # Downloading and installing Maven
@@ -30,5 +30,13 @@ RUN mkdir -p /usr/share/maven /usr/share/maven/ref \
 ENV MAVEN_HOME /usr/share/maven
 ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
 
-
 RUN mvn --version
+
+COPY pom.xml .
+RUN mvn clean install
+
+
+FROM tomcat:8.5.16
+
+CMD ["catalina.sh", "run"]
+
